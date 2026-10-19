@@ -243,3 +243,40 @@ def test_form_fields_in_browser(page, tmp_path):
     dl.value.save_as(out)
     vals = {w.field_name: w.field_value for w in pymupdf.open(out)[0].widgets()}
     assert vals["nome"] == "Maria José" and vals["estado"] == "PR" and vals["aceite"] not in ("Off", False)
+
+
+def test_download_selected_pages(page, tmp_path):
+    """Multipágina: editar a pág. 2, escolher só as páginas 2-3 na hora de baixar."""
+    page.set_input_files("input[type=file][accept*=pdf]", str(SAMPLES / "relatorio-varias-paginas.pdf"))
+    page.get_by_test_id("page-0").wait_for(timeout=30_000)
+    page.get_by_test_id("page-1").scroll_into_view_if_needed()
+    page.locator('[role=button][aria-label^="Relatório anual - página 2"]').first.wait_for(timeout=30_000)
+    edit(page, "Relatório anual - página 2", "Relatório anual - página DOIS")
+    page.get_by_test_id("save").click()
+    page.get_by_test_id("page-picker").wait_for()
+    page.get_by_test_id("pages-some").check()
+    page.get_by_test_id("pages-input").fill("2-3")
+    assert "2 de" in page.get_by_test_id("page-picker").text_content()
+    page.screenshot(path=str(SHOTS / "05-escolher-paginas.png"))
+    with page.expect_download(timeout=60_000) as dl:
+        page.get_by_test_id("pages-confirm").click()
+    path = tmp_path / "paginas.pdf"
+    dl.value.save_as(path)
+    page.get_by_text("PDF salvo e verificado").wait_for()
+    doc = pymupdf.open(path)
+    assert doc.page_count == 2
+    assert "Relatório anual - página DOIS" in doc[0].get_text()
+    assert "página 3" in doc[1].get_text()
+
+    # clicando nas miniaturas também funciona (sem alterações extras: extrair só a página 1)
+    page.get_by_role("button", name="Fechar", exact=True).click()
+    page.get_by_test_id("save").click()
+    page.get_by_test_id("pages-some").check()
+    page.get_by_role("button", name="Nenhuma", exact=True).click()
+    page.get_by_test_id("pick-1").click()
+    with page.expect_download(timeout=60_000) as dl2:
+        page.get_by_test_id("pages-confirm").click()
+    p2 = tmp_path / "p1.pdf"
+    dl2.value.save_as(p2)
+    d2 = pymupdf.open(p2)
+    assert d2.page_count == 1 and "página 1" in d2[0].get_text()
