@@ -54,8 +54,8 @@ export function SaveDialog(props: Props) {
   const { state, onClose, onRetry, onConfirmSignature } = props;
   if (state.phase === "closed") return null;
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-ink-900/40 p-4" role="dialog" aria-modal>
-      <div className={`w-full rounded-2xl bg-white p-6 shadow-2xl ${state.phase === "choose-pages" ? "max-w-2xl" : "max-w-lg"}`}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-sm" role="dialog" aria-modal>
+      <div className={`w-full rounded-2xl bg-night-900 p-6 shadow-2xl ring-1 ring-brand-500/20 ${state.phase === "choose-pages" ? "max-w-2xl" : "max-w-lg"}`}>
         {state.phase === "choose-pages" && <PagePicker {...props} />}
         {state.phase === "confirm-signature" && (
           <>
@@ -68,7 +68,7 @@ export function SaveDialog(props: Props) {
               <button className="rounded-lg px-4 py-2 text-ink-600 hover:bg-ink-100" onClick={onClose}>
                 Cancelar
               </button>
-              <button className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-white hover:bg-brand-600" onClick={onConfirmSignature}>
+              <button className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-night-950 hover:bg-brand-600" onClick={onConfirmSignature}>
                 Entendo, gerar PDF editado
               </button>
             </div>
@@ -89,7 +89,7 @@ export function SaveDialog(props: Props) {
         {state.phase === "done" && (
           <>
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-emerald-500/100/15 text-emerald-400">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12l5 5 9-10" /></svg>
               </span>
               <div>
@@ -110,7 +110,7 @@ export function SaveDialog(props: Props) {
                 <a
                   href={state.report.downloadUrl}
                   download={state.report.filename}
-                  className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-white hover:bg-brand-600"
+                  className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-night-950 hover:bg-brand-600"
                 >
                   Baixar novamente
                 </a>
@@ -121,19 +121,19 @@ export function SaveDialog(props: Props) {
         {state.phase === "error" && (
           <>
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-red-100 text-red-600 font-bold">!</span>
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-red-500/15 text-red-400 font-bold">!</span>
               <div>
                 <h2 className="text-lg font-semibold">O PDF não foi salvo</h2>
                 <p className="text-sm text-ink-600">Nenhum arquivo foi baixado.</p>
               </div>
             </div>
-            <div className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+            <div className="mt-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300" role="alert">
               {state.message}
             </div>
             {state.report && (
               <>
                 {state.report.errors.length > 0 && (
-                  <ul className="mt-3 list-disc pl-5 text-sm text-red-700">
+                  <ul className="mt-3 list-disc pl-5 text-sm text-red-300">
                     {state.report.errors.map((e, i) => (
                       <li key={i}>{e}</li>
                     ))}
@@ -146,7 +146,7 @@ export function SaveDialog(props: Props) {
               <button className="rounded-lg px-4 py-2 text-ink-600 hover:bg-ink-100" onClick={onClose}>
                 Fechar
               </button>
-              <button className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-white hover:bg-brand-600" onClick={onRetry}>
+              <button className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-night-950 hover:bg-brand-600" onClick={onRetry}>
                 Tentar novamente
               </button>
             </div>
@@ -161,7 +161,7 @@ function Warnings({ items }: { items: string[] }) {
   const unique = Array.from(new Set(items));
   if (!unique.length) return null;
   return (
-    <ul className="mt-4 space-y-1 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+    <ul className="mt-4 space-y-1 rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-200">
       {unique.map((w, i) => (
         <li key={i}>• {w}</li>
       ))}
@@ -176,7 +176,7 @@ function Checks({ report }: { report: ExportReport }) {
       <ul className="mt-2 max-h-56 space-y-1 overflow-auto thin-scroll">
         {report.checks.map((c, i) => (
           <li key={i} className="flex gap-2">
-            <span className={c.ok ? "text-emerald-600" : "text-red-600"}>{c.ok ? "✓" : "✗"}</span>
+            <span className={c.ok ? "text-emerald-400" : "text-red-400"}>{c.ok ? "✓" : "✗"}</span>
             <span>
               {c.name}
               {c.detail && <span className="text-ink-400"> — {c.detail}</span>}
@@ -240,7 +240,7 @@ function PagePicker({ pageCount, editedPages, hasEdits, thumbUrl, onChoosePages,
               value={text}
               onChange={(e) => onText(e.target.value)}
               placeholder="Ex.: 1-3, 5, 8"
-              className={`min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 ${textError ? "border-red-400 focus:ring-red-200" : "border-ink-200 focus:ring-brand-200"}`}
+              className={`min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 ${textError ? "border-red-400 focus:ring-red-500/30" : "border-ink-200 focus:ring-brand-500/40"}`}
               data-testid="pages-input"
               aria-label="Páginas"
             />
@@ -251,7 +251,7 @@ function PagePicker({ pageCount, editedPages, hasEdits, thumbUrl, onChoosePages,
               Nenhuma
             </button>
           </div>
-          {textError && <p className="mt-1 text-xs text-red-600">Use números de 1 a {pageCount}, separados por vírgula ou com intervalo (ex.: 2-4).</p>}
+          {textError && <p className="mt-1 text-xs text-red-400">Use números de 1 a {pageCount}, separados por vírgula ou com intervalo (ex.: 2-4).</p>}
           <div className="thin-scroll mt-3 grid max-h-72 grid-cols-4 gap-2 overflow-y-auto sm:grid-cols-6">
             {Array.from({ length: pageCount }, (_, p) => (
               <button
@@ -264,10 +264,10 @@ function PagePicker({ pageCount, editedPages, hasEdits, thumbUrl, onChoosePages,
                 <img src={thumbUrl(p)} loading="lazy" alt="" className={`w-full bg-white ${sel.has(p) ? "" : "opacity-60"}`} />
                 <span className="mt-0.5 flex items-center justify-between text-xs text-ink-600">
                   {p + 1}
-                  {editedPages.includes(p) && <span className="h-2 w-2 rounded-full bg-emerald-500" title="Página editada" />}
+                  {editedPages.includes(p) && <span className="h-2 w-2 rounded-full bg-emerald-500/100" title="Página editada" />}
                 </span>
                 {sel.has(p) && (
-                  <span className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-brand-500 text-white">
+                  <span className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-brand-500 text-night-950">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12l5 5 9-10" /></svg>
                   </span>
                 )}
@@ -278,7 +278,7 @@ function PagePicker({ pageCount, editedPages, hasEdits, thumbUrl, onChoosePages,
             {selected.length} de {pageCount} página(s) selecionada(s)
           </p>
           {omittedEdits.length > 0 && (
-            <p className="mt-1 text-xs text-amber-700">
+            <p className="mt-1 text-xs text-amber-300">
               Atenção: as alterações nas páginas {formatRanges(omittedEdits)} não estarão no arquivo, porque essas páginas não foram selecionadas.
             </p>
           )}
@@ -290,7 +290,7 @@ function PagePicker({ pageCount, editedPages, hasEdits, thumbUrl, onChoosePages,
           Cancelar
         </button>
         <button
-          className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-white hover:bg-brand-600 disabled:opacity-50"
+          className="rounded-lg bg-brand-500 px-4 py-2 font-medium text-night-950 hover:bg-brand-600 disabled:opacity-50"
           disabled={!canDownload}
           onClick={() => onChoosePages(mode === "all" || selected.length === pageCount ? null : selected)}
           data-testid="pages-confirm"

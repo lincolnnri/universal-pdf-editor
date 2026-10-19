@@ -427,6 +427,8 @@ class Editor:
                 keep_run(list(range(n - s, n)), delta if abs(delta) > tol else 0.0)
         if not redact and not pieces:
             return None
+        # ordem de leitura no content stream (a extração/cópia de texto segue essa ordem)
+        pieces.sort(key=lambda it: proj(org[0], it[0]))
         if not all(covers_all(t) for _, t in pieces):
             return None
         area = pymupdf.Rect()

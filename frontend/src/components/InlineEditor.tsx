@@ -144,7 +144,7 @@ export function InlineEditor({ initial, zoom, box, maxExtent, cover, kindLabel, 
       />
       {/* barra de formatação */}
       <div
-        className="absolute z-30 flex items-center gap-1 rounded-lg border border-ink-200 bg-white px-1.5 py-1 shadow-lg text-sm"
+        className="absolute z-30 flex items-center gap-1 rounded-lg border border-ink-200 bg-night-800 px-1.5 py-1 shadow-lg text-sm"
         style={
           x0 * zoom > pageWidth / 2
             ? { right: Math.max(0, pageWidth - x1 * zoom), top: Math.max(0, y0 * zoom - 44) }
@@ -194,7 +194,7 @@ export function InlineEditor({ initial, zoom, box, maxExtent, cover, kindLabel, 
         <button
           onMouseDown={stop}
           onClick={commit}
-          className="ml-0.5 rounded-md bg-brand-500 px-2.5 py-1 font-medium text-white hover:bg-brand-600"
+          className="ml-0.5 rounded-md bg-brand-500 px-2.5 py-1 font-medium text-night-950 hover:bg-brand-600"
           data-testid="commit-edit"
         >
           Concluir
@@ -202,7 +202,7 @@ export function InlineEditor({ initial, zoom, box, maxExtent, cover, kindLabel, 
       </div>
       {overflow && (
         <div
-          className="absolute z-30 rounded-md bg-amber-50 px-2 py-1 text-xs text-amber-800 shadow ring-1 ring-amber-200"
+          className="absolute z-30 rounded-md bg-amber-500/10 px-2 py-1 text-xs text-amber-200 shadow ring-1 ring-amber-500/30"
           style={{ left: x0 * zoom, top: (y1 + 4) * zoom }}
         >
           O texto é maior que o espaço disponível — será comprimido para não invadir elementos vizinhos.

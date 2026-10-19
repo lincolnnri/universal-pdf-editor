@@ -386,7 +386,7 @@ export function Editor({ doc, onClose }: Props) {
   return (
     <div className="flex h-full flex-col">
       {/* barra superior */}
-      <header className="flex h-14 shrink-0 items-center gap-3 whitespace-nowrap border-b border-ink-200 bg-white px-4">
+      <header className="flex h-14 shrink-0 items-center gap-3 whitespace-nowrap border-b border-ink-200 bg-night-900/95 px-4 backdrop-blur">
         <Logo compact />
         <span className="ml-2 min-w-[5rem] max-w-[16rem] shrink truncate text-sm text-ink-600" title={doc.filename}>
           {doc.filename}
@@ -429,7 +429,7 @@ export function Editor({ doc, onClose }: Props) {
         <button
           onClick={startSave}
           disabled={save.phase === "working"}
-          className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600 disabled:opacity-60"
+          className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-night-950 hover:bg-brand-600 disabled:opacity-60"
           data-testid="save"
         >
           {save.phase === "working" && <Spinner className="h-4 w-4" />}
@@ -446,17 +446,17 @@ export function Editor({ doc, onClose }: Props) {
       </header>
 
       {doc.warnings.length > 0 && (
-        <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-800">{doc.warnings.join(" ")}</div>
+        <div className="border-b border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-200">{doc.warnings.join(" ")}</div>
       )}
       {(previewError || toast) && (
-        <div className="border-b border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700" role="alert">
+        <div className="border-b border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-300" role="alert">
           {previewError ?? toast}
         </div>
       )}
 
       <div className="flex min-h-0 flex-1">
         {/* miniaturas */}
-        <aside className="thin-scroll hidden w-44 shrink-0 overflow-y-auto border-r border-ink-200 bg-white p-3 md:block">
+        <aside className="thin-scroll hidden w-44 shrink-0 overflow-y-auto border-r border-ink-200 bg-night-900 p-3 md:block">
           {doc.pages.map((p) => {
             const thumb = previews[p.number]?.url ?? api.pageImageUrl(doc.id, p.number, 0.25);
             const edited = (opsByPage[p.number]?.length ?? 0) > 0;
@@ -469,7 +469,7 @@ export function Editor({ doc, onClose }: Props) {
                 <img src={thumb} loading="lazy" alt="" className="w-full border border-ink-200 bg-white" style={{ aspectRatio: `${p.width} / ${p.height}` }} />
                 <span className="mt-1 flex items-center justify-between text-xs text-ink-600">
                   {p.number + 1}
-                  {edited && <span className="h-2 w-2 rounded-full bg-emerald-500" title="Página editada" />}
+                  {edited && <span className="h-2 w-2 rounded-full bg-emerald-500/100" title="Página editada" />}
                 </span>
               </button>
             );
@@ -477,7 +477,7 @@ export function Editor({ doc, onClose }: Props) {
         </aside>
 
         {/* documento */}
-        <main ref={scroller} className="thin-scroll relative flex-1 overflow-auto bg-ink-100/60">
+        <main ref={scroller} className="thin-scroll relative flex-1 overflow-auto bg-transparent">
           <div className="space-y-8 px-8 py-8">
             {doc.pages.map((p) => {
               const a = analyses[p.number];
@@ -517,7 +517,7 @@ export function Editor({ doc, onClose }: Props) {
       </div>
 
       {tool !== "edit" && (
-        <div className="pointer-events-none fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-ink-900 px-4 py-2 text-sm text-white shadow-lg">
+        <div className="pointer-events-none fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-night-800 px-4 py-2 text-sm text-ink-900 shadow-glow ring-1 ring-brand-500/40">
           {tool === "text" ? "Clique na página onde deseja adicionar o texto" : "Clique na página onde deseja inserir a imagem"} · Esc para cancelar
         </div>
       )}
@@ -571,7 +571,7 @@ function ToolTab({ active, onClick, children, testid }: { active: boolean; onCli
     <button
       onClick={onClick}
       data-testid={testid}
-      className={`rounded-md px-3 py-1.5 font-medium ${active ? "bg-white text-ink-900 shadow-sm" : "text-ink-600 hover:text-ink-900"}`}
+      className={`rounded-md px-3 py-1.5 font-medium ${active ? "bg-night-700 text-brand-500 shadow-sm" : "text-ink-600 hover:text-ink-900"}`}
     >
       {children}
     </button>

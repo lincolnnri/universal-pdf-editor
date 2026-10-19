@@ -139,13 +139,13 @@ export function PageView(p: Props) {
           className="pointer-events-none absolute inset-0 h-full w-full"
         />
         {(p.previewLoading || p.analysisLoading) && (
-          <div className="pointer-events-none absolute right-2 top-2 z-40 flex items-center gap-1.5 rounded-full bg-ink-900/80 px-2.5 py-1 text-xs text-white">
+          <div className="pointer-events-none absolute right-2 top-2 z-40 flex items-center gap-1.5 rounded-full bg-night-950/85 px-2.5 py-1 text-xs text-ink-900">
             <Spinner className="h-3.5 w-3.5" />
             {p.analysisLoading ? (analysis ? "Analisando…" : "Reconhecendo texto…") : "Aplicando alteração…"}
           </div>
         )}
         {p.analysisError && (
-          <div className="absolute inset-x-4 top-4 z-40 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 ring-1 ring-red-200">
+          <div className="absolute inset-x-4 top-4 z-40 rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300 ring-1 ring-red-500/30">
             {p.analysisError}
           </div>
         )}
@@ -229,7 +229,7 @@ export function PageView(p: Props) {
           if (f.type === "choice") {
             return (
               <select key={f.id} title={title} disabled={f.readOnly} aria-label={f.name}
-                      className="absolute cursor-pointer rounded-sm bg-sky-200/30 text-transparent ring-1 ring-sky-400/60 focus:bg-white focus:text-ink-900"
+                      className="absolute cursor-pointer rounded-sm bg-sky-200/30 text-transparent ring-1 ring-sky-400/60 focus:bg-white focus:text-black"
                       style={box} value={String(value)} onMouseDown={(e) => e.stopPropagation()}
                       onChange={(e) => p.onSetField(page.number, f, e.target.value)}>
                 {(f.options ?? []).map((o) => <option key={o} value={o}>{o}</option>)}
@@ -238,7 +238,7 @@ export function PageView(p: Props) {
           }
           return (
             <input key={f.id + String(value)} title={title} disabled={f.readOnly} aria-label={f.name} defaultValue={String(value)}
-                   className="absolute rounded-sm bg-sky-200/30 px-1 text-transparent caret-ink-900 ring-1 ring-sky-400/60 focus:bg-white focus:text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                   className="absolute rounded-sm bg-sky-200/30 px-1 text-transparent caret-black ring-1 ring-sky-400/60 focus:bg-white focus:text-black focus:outline-none focus:ring-2 focus:ring-brand-500"
                    style={box} onMouseDown={(e) => e.stopPropagation()}
                    onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); e.stopPropagation(); }}
                    onBlur={(e) => { if (e.target.value !== String(value)) p.onSetField(page.number, f, e.target.value); }} />
@@ -376,16 +376,16 @@ function draftFor(el: TextElement, op: Operation | undefined): Draft {
 }
 
 function Badge({ children, tone }: { children: React.ReactNode; tone: "amber" | "green" | "slate" }) {
-  const cls = { amber: "bg-amber-50 text-amber-700", green: "bg-emerald-50 text-emerald-700", slate: "bg-ink-100 text-ink-600" }[tone];
+  const cls = { amber: "bg-amber-500/10 text-amber-300", green: "bg-emerald-500/10 text-emerald-300", slate: "bg-ink-100 text-ink-600" }[tone];
   return <span className={`rounded-full px-2 py-0.5 font-medium ${cls}`}>{children}</span>;
 }
 
 function SelectionTools({ onDelete, label }: { onDelete: () => void; label: string }) {
   return (
-    <div className="absolute -top-9 left-0 z-30 flex items-center gap-1 whitespace-nowrap rounded-lg border border-ink-200 bg-white px-2 py-1 text-xs shadow"
+    <div className="absolute -top-9 left-0 z-30 flex items-center gap-1 whitespace-nowrap rounded-lg border border-ink-200 bg-night-800 px-2 py-1 text-xs shadow"
          onMouseDown={(e) => e.stopPropagation()}>
       <span className="text-ink-400">{label}</span>
-      <button className="rounded px-1.5 py-0.5 text-red-600 hover:bg-red-50" onClick={onDelete}>
+      <button className="rounded px-1.5 py-0.5 text-red-400 hover:bg-red-500/100/15" onClick={onDelete}>
         Excluir
       </button>
     </div>

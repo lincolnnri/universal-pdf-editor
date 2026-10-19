@@ -468,3 +468,23 @@ def test_rtl_text_edit():
     out, rep = export_with_verification(data, analyses, [{"type": "edit_text", "page": 0, "elementId": el.id, "text": "שלום חברים"}], None)
     assert rep.ok, rep.errors
     assert "חברים" in pymupdf.open(stream=out, filetype="pdf")[0].get_text()
+
+
+def test_minimal_edit_keeps_unchanged_glyphs_and_reading_order():
+    """Trocar dígitos num valor alinhado à direita: fonte original, sem nova tentativa,
+    texto extraído na ordem certa e o resto da página intacto."""
+    from pathlib import Path
+    from app.engine.verify import export_with_verification
+    sample = Path(__file__).resolve().parents[2] / "samples" / "conta-energia-exemplo.pdf"
+    if not sample.exists():
+        pytest.skip("amostra ausente")
+    data = sample.read_bytes()
+    d = pymupdf.open(stream=data)
+    a = analyze_page(d[0])
+    e = next(x for x in a.elements if x.text.startswith("224,98"))
+    out, rep = export_with_verification(data, {0: a}, [{"type": "edit_text", "page": 0, "elementId": e.id,
+                                                        "text": "239,45"}], None)
+    assert rep.ok and not rep.warnings
+    assert rep.ops[0]["font"].startswith("original")
+    o = pymupdf.open(stream=out)
+    assert "239,45" in o[0].get_text() and "224,98" not in o[0].get_text()
