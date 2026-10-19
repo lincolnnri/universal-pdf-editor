@@ -1,0 +1,8 @@
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+.venv
+frontend/dist
+e2e
+samples
+*.zip

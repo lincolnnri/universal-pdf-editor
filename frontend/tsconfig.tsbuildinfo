@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/components/Editor.tsx","./src/components/InlineEditor.tsx","./src/components/Logo.tsx","./src/components/PageView.tsx","./src/components/SaveDialog.tsx","./src/components/UploadScreen.tsx","./src/lib/api.ts","./src/lib/history.ts","./src/lib/text.ts"],"version":"5.9.3"}
